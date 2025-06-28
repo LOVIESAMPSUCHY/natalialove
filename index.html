@@ -7,7 +7,7 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      background-color: #0d1117;
+      background: linear-gradient(to bottom, #1e1b4b, #0f172a);
       overflow: hidden;
     }
     .fade-in {
@@ -25,6 +25,7 @@
       transform: rotate(45deg);
       animation: float 5s linear infinite;
       opacity: 0.7;
+      z-index: 0;
     }
     .heart::before,
     .heart::after {
@@ -49,14 +50,34 @@
         opacity: 0;
       }
     }
+    .typewriter {
+      display: inline-block;
+      overflow: hidden;
+      border-right: .15em solid white;
+      white-space: nowrap;
+      animation: typing 2s steps(40, end), blink .75s step-end infinite;
+    }
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+    @keyframes blink {
+      0% { border-color: transparent }
+      50% { border-color: white }
+      100% { border-color: transparent }
+    }
   </style>
 </head>
 <body class="text-gray-100 min-h-screen flex flex-col justify-center items-center px-4">
+  <audio autoplay loop>
+    <source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_96b1095b0e.mp3?filename=soft-piano-ambient-10770.mp3" type="audio/mpeg">
+  </audio>
+
   <div class="max-w-xl w-full text-center z-10 relative">
     <h1 class="text-3xl md:text-4xl font-bold mb-6 text-white">10 powodów dlaczego powinnaś wybrać mnie</h1>
     <p class="mb-4 text-gray-400">Kliknij przycisk aby odkrywać kolejne powody.</p>
 
-    <div id="reasonBox" class="min-h-[100px] text-lg text-gray-200 fade-in mb-6"></div>
+    <div id="reasonBox" class="min-h-[100px] text-lg text-gray-200 mb-6"></div>
 
     <button id="nextBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full font-medium">Pokaż powód</button>
 
@@ -89,9 +110,12 @@
 
     nextBtn.addEventListener("click", () => {
       if (currentIndex < reasons.length) {
-        reasonBox.textContent = reasons[currentIndex];
-        reasonBox.classList.add("fade-in");
-        setTimeout(() => reasonBox.classList.remove("fade-in"), 600);
+        const reason = reasons[currentIndex];
+        const span = document.createElement('span');
+        span.classList.add('typewriter');
+        span.textContent = reason;
+        reasonBox.innerHTML = '';
+        reasonBox.appendChild(span);
         currentIndex++;
         if (currentIndex === reasons.length) {
           nextBtn.classList.add("hidden");
