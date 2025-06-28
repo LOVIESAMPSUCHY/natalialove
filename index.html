@@ -8,6 +8,7 @@
   <style>
     body {
       background-color: #0d1117;
+      overflow: hidden;
     }
     .fade-in {
       animation: fadeIn 0.6s ease-out;
@@ -16,10 +17,42 @@
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    .heart {
+      position: fixed;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(45deg);
+      animation: float 5s linear infinite;
+      opacity: 0.7;
+    }
+    .heart::before,
+    .heart::after {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+    .heart::before {
+      top: -10px;
+      left: 0;
+    }
+    .heart::after {
+      left: -10px;
+      top: 0;
+    }
+    @keyframes float {
+      to {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
   </style>
 </head>
 <body class="text-gray-100 min-h-screen flex flex-col justify-center items-center px-4">
-  <div class="max-w-xl w-full text-center">
+  <div class="max-w-xl w-full text-center z-10 relative">
     <h1 class="text-3xl md:text-4xl font-bold mb-6 text-white">10 powodów dlaczego powinnaś wybrać mnie</h1>
     <p class="mb-4 text-gray-400">Kliknij przycisk aby odkrywać kolejne powody.</p>
 
@@ -47,7 +80,6 @@
       "Bo nie ma takiego drugiego chłopaka na tym świecie jak ja :P",
       "Bo jestem idealnym materiałem na męża ^^",
       "Kocham cie buziaki skarbek"
-      
     ];
 
     let currentIndex = 0;
@@ -67,6 +99,17 @@
         }
       }
     });
+
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (Math.random() * 2 + 3) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 5000);
+    }
+
+    setInterval(createHeart, 300);
   </script>
 </body>
 </html>
