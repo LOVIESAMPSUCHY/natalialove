@@ -2,89 +2,70 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8">
-  <title>Serce 3D dla Natalii ❤️</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wyjdzzamniepls</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { margin: 0; overflow: hidden; background: radial-gradient(#30001f, #000); }
-    canvas { display: block; }
-    #napis {
-      position: absolute;
-      top: 20px;
-      width: 100%;
-      text-align: center;
-      font-family: 'Segoe UI', sans-serif;
-      font-size: 3em;
-      color: #ff66cc;
-      text-shadow: 0 0 10px #ffccff, 0 0 20px #ff0066;
-      z-index: 10;
+    body {
+      background-color: #0d1117;
+    }
+    .fade-in {
+      animation: fadeIn 0.6s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
-<body>
-  <div id="napis">Dla Natalii ❤️</div>
-  <script type="module">
-    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
-    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.157.0/examples/jsm/controls/OrbitControls.js';
+<body class="text-gray-100 min-h-screen flex flex-col justify-center items-center px-4">
+  <div class="max-w-xl w-full text-center">
+    <h1 class="text-3xl md:text-4xl font-bold mb-6 text-white">10 powodów dlaczego powinnaś wybrać mnie</h1>
+    <p class="mb-4 text-gray-400">Kliknij przycisk aby odkrywać kolejne powody.</p>
 
-    // Scena
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth/window.innerHeight, 0.1, 100);
-    camera.position.z = 5;
+    <div id="reasonBox" class="min-h-[100px] text-lg text-gray-200 fade-in mb-6"></div>
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+    <button id="nextBtn" class="bg-indigo-600 hover:bg-indigo-500 text-white px-6 py-2 rounded-full font-medium">Pokaż powód</button>
 
-    // Światło
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-    scene.add(ambientLight);
-    const pointLight = new THREE.PointLight(0xff0055, 1, 100);
-    pointLight.position.set(5, 5, 5);
-    scene.add(pointLight);
+    <div id="finalMessage" class="mt-6 text-xl text-green-400 font-semibold hidden"> Dziękuje za to że jesteś Natalia </div>
+  </div>
 
-    // Kształt serca
-    const x = 0, y = 0;
-    const heartShape = new THREE.Shape();
-    heartShape.moveTo(x + 0, y + 0);
-    heartShape.bezierCurveTo(x + 0, y + 0, x - 1.5, y + 1.5, x + 0, y + 3);
-    heartShape.bezierCurveTo(x + 1.5, y + 1.5, x + 0, y + 0, x + 0, y + 0);
+  <script>
+    const reasons = [
+      "Bo jestem kimś, kto potrafi słuchać – nie tylko tego, co mówisz, ale i tego, czego nie mówisz.",
+      "Bo szanuję i kocham Cię za to, kim jesteś, a nie tylko za to jak wyglądasz.",
+      "Bo potrafię sprawić byś się uśmiechnęła nawet w najbardziej szary dzień.",
+      "Bo z Tobą każda spędzona chwila sprawia że czuje się szczęśliwy nawet w najbardziej szary dzień.",
+      "Bo nie boję się być wrażliwy i prawdziwy przy Tobie.",
+      "Bo dla mnie związek to wspólna przestrzeń, nie ograniczenie.",
+      "Bo razem możemy przejść wiele i zbudować wspólną przyszłość.",
+      "Bo chcę budować – nie tylko przyszłość, ale też codzienność.",
+      "Bo potrafię zadbać, zatroszczyć się i być obok ciebie zrobić wszystko abyś czuła się szczęśliwa przy mnie.",
+      "Bo wierze że razem możemy zbudować wspólną przyszłość i pokaże ci że prawdziwa miłość istnieje",
+      "Bo jesteś dziewczyną która zasługuje na to aby czuć się szczęśliwa i zasługuje na prawdziwą miłość",
+      "Bo nie wyobrażam sobie dnia bez ciebie i mam nadzieje że razem uda nam się zbudować wspólną przyszłość",
+      "Bo nie ma takiego drugiego chłopaka na tym świecie jak ja :P",
+      "Bo jestem idealnym materiałem na męża ^^",
+      "Kocham cie buziaki skarbek"
+      
+    ];
 
-    // Ekstruzja 3D
-    const geometry = new THREE.ExtrudeGeometry(heartShape, {
-      depth: 0.5,
-      bevelEnabled: true,
-      bevelSegments: 10,
-      steps: 2,
-      bevelSize: 0.1,
-      bevelThickness: 0.1
-    });
+    let currentIndex = 0;
+    const reasonBox = document.getElementById("reasonBox");
+    const nextBtn = document.getElementById("nextBtn");
+    const finalMessage = document.getElementById("finalMessage");
 
-    // Materiał
-    const material = new THREE.MeshPhongMaterial({
-      color: 0xff3366,
-      shininess: 100,
-      specular: 0xffcccc
-    });
-
-    const heart = new THREE.Mesh(geometry, material);
-    heart.rotation.x = Math.PI;
-    scene.add(heart);
-
-    // Kontrola kamery
-    const controls = new OrbitControls(camera, renderer.domElement);
-
-    // Animacja
-    function animate() {
-      requestAnimationFrame(animate);
-      heart.rotation.y += 0.01;
-      renderer.render(scene, camera);
-    }
-    animate();
-
-    // Responsywność
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
+    nextBtn.addEventListener("click", () => {
+      if (currentIndex < reasons.length) {
+        reasonBox.textContent = reasons[currentIndex];
+        reasonBox.classList.add("fade-in");
+        setTimeout(() => reasonBox.classList.remove("fade-in"), 600);
+        currentIndex++;
+        if (currentIndex === reasons.length) {
+          nextBtn.classList.add("hidden");
+          finalMessage.classList.remove("hidden");
+        }
+      }
     });
   </script>
 </body>
